@@ -1,0 +1,610 @@
+require 'spec_helper'
+
+#####################
+# INCLUDE VARS HERE
+#####################
+service_name = "httpd_jm1"
+listen_port_http = "80"
+listen_port_https = "443"
+#####################
+
+### ServiceName
+describe service( "#{service_name}" ) do
+  it { should be_enabled }
+  it { should be_running }
+end
+
+
+
+### Files
+describe file( "/etc/#{service_name}/bin/apachectl" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "755" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/httpd.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-autoindex.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-languages.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-info.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-default.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-jk.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/workers.properties" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-security.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe file( "/etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+
+
+### httpd.conf
+# ServerRoot
+describe command( "grep -Ec '^ServerRoot' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^0$/ }
+end
+
+# Listen(HTTP)
+describe command( "grep -Ec '^Listen' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^Listen' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^Listen #{listen_port_http}$/ }
+end
+
+describe port( "#{listen_port_http}" ) do
+  it { should be_listening }
+end
+
+# User
+describe command( "grep -Ec '^User' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^User' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^User apache$/ }
+end
+
+# Group
+describe command( "grep -Ec '^Group' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^Group' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^Group apache$/ }
+end
+
+# ServerAdmin
+describe command( "grep -Ec '^ServerAdmin' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^ServerAdmin' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^ServerAdmin root@localhost$/ }
+end
+
+# ServerName
+describe command( "grep -Ec '^ServerName' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^ServerName' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^ServerName localhost:80$/ }
+end
+
+# DocumentRoot
+describe command( "grep -Ec '^DocumentRoot' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^DocumentRoot' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^DocumentRoot "\/etc\/httpd_jm1\/docs"$/ }
+end
+
+describe command( "grep -Ec '^<Directory \"/etc/httpd_jm1/docs\">$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# DirectoryIndex
+describe command( "grep -Ec '^\s*DirectoryIndex' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^\s*DirectoryIndex' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^\s*DirectoryIndex index\.html$/ }
+end
+
+# ErrorLog
+describe command( "grep -Ec '^ErrorLog' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^ErrorLog' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^ErrorLog "logs\/error_log"$/ }
+end
+
+# LogLevel
+describe command( "grep -Ec '^LogLevel' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^LogLevel' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^LogLevel warn$/ }
+end
+
+# CustomLog
+describe command( "grep -Ec '^\s*LogFormat .+ combined$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^\s*LogFormat .+ combined$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /LogFormat "%t %h %{X-Forwarded-For}i %l %u \\"%r\\" %>s %b \\"%{Referer}i\\" \\"%{User-Agent}i\\" %X %D #%{Host}i#" combined$/ }
+end
+
+# SetEnvIf(Request_URI)
+describe command( "grep -Ec '^\s*SetEnvIf Request_URI \"\\\\\.ico\\$\" no_log' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# CustomLog
+describe command( "grep -Ec '^\s*CustomLog .+ common$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^\s*CustomLog .+ common$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /CustomLog "logs\/access_log" common$/ }
+end
+
+# RequestHeader(unset)
+describe command( "grep -Ec '^\s*RequestHeader unset' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^\s*RequestHeader unset' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /RequestHeader unset Proxy early$/ }
+end
+
+# TypesConfig
+describe command( "grep -Ec '^\s*TypesConfig' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^\s*TypesConfig' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /TypesConfig conf\/mime.types$/ }
+end
+
+# AddType
+describe command( "grep -Ec '^\s*AddType application\/x-compress \.Z$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^\s*AddType application\/x-gzip \.gz \.tgz$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^\s*AddType application\/x-x509-ca-cert \.crt$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^\s*AddType application\/x-pkcs7-crl \.crl$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# AddHandler
+describe command( "grep -Ec '^\s*AddHandler type-map var$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# AddOutputFilter
+describe command( "grep -Ec '^\s*AddOutputFilter INCLUDES \.shtml$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# MIMEMagicFile
+describe command( "grep -Ec '^MIMEMagicFile conf\/magic$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# EnableMMAP
+describe command( "grep -Ec '^EnableMMAP on$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# EnableSendfile
+describe command( "grep -Ec '^EnableSendfile on$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# BrowserMatch
+describe command( "grep -Ec '^BrowserMatch \"Mozilla/2\" nokeepalive$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"MSIE 4\\\\.0b2;\" nokeepalive downgrade-1.0 force-response-1.0$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"RealPlayer 4\\\\.0\" force-response-1.0$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"Java/1\\\\.0\" force-response-1.0$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"JDK/1\\\\.0\" force-response-1.0$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"Microsoft Data Access Internet Publishing Provider\" redirect-carefully$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"MS FrontPage\" redirect-carefully$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"\\^WebDrive\" redirect-carefully$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"\\^WebDAVFS/1\.\\\[0123\\\]\" redirect-carefully$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"\\^gnome-vfs/1\.0\" redirect-carefully$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"\\^XML Spy\" redirect-carefully$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^BrowserMatch \"\\^Dreamweaver-WebDAV-SCM1\" redirect-carefully$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+ 
+# Redirect
+describe command( "grep -Ec '^Redirect 404 /favicon\.ico$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# Location(/favicon.ico)
+describe command( "grep -Ec '^ErrorDocument 404 \"No favicon\"$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# RewriteEngine
+describe command( "grep -Ec '^RewriteEngine On$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# RewriteCond
+describe command( "grep -Ec '^RewriteCond %{REQUEST_URI} !/mainte.html$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^2$/ }
+end
+
+describe command( "grep -Ec '^RewriteCond %{TIME_HOUR} <03$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# RewriteRule(mainte.html)
+describe command( "grep -Ec '^RewriteRule \\(\\^/jmanager/\.\\*\\) /mainte\.html \\[R\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^2$/ }
+end
+
+describe command( "grep -Ec '^RewriteCond %{TIME_HOUR} >22$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# SetEnvIf(X-Forwarded-For)
+describe command( "grep -Ec '^SetEnvIf X-Forwarded-For \"\\.\\+\" forwarded$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# RewriteRule(CLIENT_ADDR.html)
+describe command( "grep -Ec '^RewriteRule \\^\\(\\.\\*\\) - \\[E=CLIENT_ADDR:%{REMOTE_ADDR}\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# RequestHeader
+describe command( "grep -Ec '^RequestHeader set X-Forwarded-For \"%{CLIENT_ADDR}e\" env=!forwarded$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# RewriteRule(jmanager)
+describe command( "grep -Ec '^RewriteRule \\^/\\?\\$ /jmanager/ \\[R,L\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# TraceEnable
+describe command( "grep -Ec '^TraceEnable Off$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# FileETag
+describe command( "grep -Ec '^FileETag MTime Size$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+
+
+
+
+
+
+
+
+
+### HTTPS Listen
+describe command( "grep -Ec '^\s*Listen' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^Listen' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  its( :stdout ) { should match /^Listen #{listen_port_https}$/ }
+end
+
+describe port( "#{listen_port_https}" ) do
+  it { should be_listening }
+end
+
+
+
+### DocumentRoot
+describe command( "grep -Ec '^DocumentRoot' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^DocumentRoot' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^DocumentRoot "\/etc\/#{service_name}\/docs"$/ }
+end
+
+describe file( "/etc/#{service_name}/docs" ) do
+  it { should be_directory }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "755" ) }
+end
+
+describe command( "curl -s http://localhost:#{listen_port_http}/HC.html" ) do
+  its( :stdout ) { should match /^HC: #{service_name}:#{listen_port_http}$/ }
+end
+
+
+
+### DocumentRoot(SSL)
+describe command( "grep -Ec '^DocumentRoot' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^DocumentRoot' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  its( :stdout ) { should match /^DocumentRoot "\/etc\/#{service_name}\/docs"$/ }
+end
+
+describe file( "/etc/#{service_name}/docs" ) do
+  it { should be_directory }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "755" ) }
+end
+
+describe command( "curl -sk https://localhost:#{listen_port_https}/HC.html" ) do
+  its( :stdout ) { should match /^HC: #{service_name}:#{listen_port_http}$/ }
+end
+
+
+describe file( "/etc/#{service_name}/logs/access_log" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe command( "curl -s http://localhost:#{listen_port_http}/#{service_name}.html" ) do
+  its( :stdout ) { should match /./ }
+end
+
+describe command( "grep -E #{service_name}\.html /var/log/#{service_name}/access_log" ) do
+  its( :stdout ) { should match /#{service_name}/ }
+end
+
+### CustomLog(SSL)
+describe command( "grep -Ec '^CustomLog' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  its( :stdout ) { should match /^2$/ }
+end
+
+describe command( "grep -E '^CustomLog' /etc/#{service_name}/conf/extra/httpd-ssl.conf | head -n 1" ) do
+  its( :stdout ) { should match /CustomLog "logs\/ssl_access_log" combined env=!no_log$/ }
+end
+
+describe file( "/etc/#{service_name}/logs/ssl_access_log" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe command( "curl -sk https://localhost:#{listen_port_https}/#{service_name}.html" ) do
+  its( :stdout ) { should match /./ }
+end
+
+describe command( "grep -E #{service_name}\.html /var/log/#{service_name}/ssl_access_log" ) do
+  its( :stdout ) { should match /#{service_name}/ }
+end
+
+
+### TrunsferLog(SSL)
+describe command( "grep -Ec '^CustomLog' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  its( :stdout ) { should match /^2$/ }
+end
+
+describe command( "grep -E '^CustomLog' /etc/#{service_name}/conf/extra/httpd-ssl.conf | tail -n 1" ) do
+  its( :stdout ) { should match /CustomLog "logs\/ssl_request_log" "%t %h %{X-Forwarded-For}i %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\"%r\\" %b"$/ }
+end
+
+describe file( "/etc/#{service_name}/logs/ssl_request_log" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+describe command( "curl -sk https://localhost:#{listen_port_https}/#{service_name}.html" ) do
+  its( :stdout ) { should match /./ }
+end
+
+describe command( "grep -E #{service_name}\.html /var/log/#{service_name}/ssl_request_log" ) do
+  its( :stdout ) { should match /#{service_name}/ }
+end
+
+
+
+
+### ErrorLog
+describe command( "grep -Ec '^ErrorLog' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^ErrorLog' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /ErrorLog "logs\/error_log"$/ }
+end
+
+describe file( "/etc/#{service_name}/logs/error_log" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+
+
+### ErrorLog(SSL)
+describe command( "grep -Ec '^ErrorLog' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^ErrorLog' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+  its( :stdout ) { should match /ErrorLog "logs\/ssl_error_log"$/ }
+end
+
+describe file( "/var/log/#{service_name}/ssl_error_log" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+
+
+### apachectl
+describe command( "grep -Ec '^HTTPD=\".+ -E ' /etc/#{service_name}/bin/apachectl" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^HTTPD=\".+ -d .+ -E ' /etc/#{service_name}/bin/apachectl" ) do
+  its( :stdout ) { should match /-d \/etc\/#{service_name} -E \/etc\/#{service_name}\/logs\/httpd\.log"$/ }
+end
+
+describe file( "/etc/#{service_name}/logs/httpd.log" ) do
+  it { should be_file }
+  it { should be_owned_by( "root" ) }
+  it { should be_grouped_into( "root" ) }
+  it { should be_mode( "644" ) }
+end
+
+
+
+### Other
+describe command( "grep -Ec '^Timeout' /etc/#{service_name}/conf/extra/httpd-default.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -E '^Timeout' /etc/#{service_name}/conf/extra/httpd-default.conf" ) do
+  its( :stdout ) { should match /^Timeout 300$/ }
+end
+
+
+
+### firewalld
+describe command( "firewall-cmd --list-ports" ) do
+  its( :stdout ) { should match /#{listen_port_http}\/tcp/ }
+end
+
+describe command( "firewall-cmd --list-ports" ) do
+  its( :stdout ) { should match /#{listen_port_https}\/tcp/ }
+end
+
