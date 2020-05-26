@@ -3,13 +3,13 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "httpd_web_tepco"
-server_root = "web/apache/tepco"
-server_name = "authori.tepco.co.jp:18001"
-listen_port_http = "18001"
+service_name = "httpd_mem_web_tohoku"
+server_root = "mem_web/apache/tohoku"
+server_name = "t-tohoku.cardnet.co.jp"
+listen_port_http = "19003"
 tomcat_addr = "127.0.0.1"
-tomcat_port = "28001"
-ap_name = "TEPCOWeb"
+tomcat_port = "29003"
+ap_name = "KAIINWeb"
 #####################
 
 ### ServiceName
