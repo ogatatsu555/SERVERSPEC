@@ -229,6 +229,11 @@ describe command( "grep -Ec '^LimitRequestFields 100$' /app/#{server_root}/conf/
   its( :stdout ) { should match /^1$/ }
 end
 
+# FielETag
+describe command( "grep -Ec '^FileETag MTime Size$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
 # LoadModule
 describe command( "grep -Ec '^LoadModule authz_host_module modules/mod_authz_host\\.so$' /app/#{server_root}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }

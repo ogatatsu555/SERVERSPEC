@@ -3,13 +3,10 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "httpd_mem_web_tepco"
-server_root = "mem_web/apache/tepco"
-server_name = "t-tepco.cardnet.co.jp"
-listen_port_http = "19001"
-tomcat_addr = "127.0.0.1"
-tomcat_port = "29001"
-ap_name = "KAIINWeb"
+service_name = "httpd_mem_web_rikuden2_proxy"
+server_root = "mem_web/apache/rikuden2_proxy"
+server_name = "t-rikuden2-p.cardnet.co.jp"
+listen_port_http = "17006"
 #####################
 
 ### ServiceName
@@ -57,27 +54,6 @@ describe file( "/app/#{server_root}/conf/extra/httpd-info.conf" ) do
 end
 
 describe file( "/app/#{server_root}/conf/extra/httpd-default.conf" ) do
-  it { should be_file }
-  it { should be_owned_by( "root" ) }
-  it { should be_grouped_into( "root" ) }
-  it { should be_mode( "644" ) }
-end
-
-describe file( "/app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  it { should be_file }
-  it { should be_owned_by( "root" ) }
-  it { should be_grouped_into( "root" ) }
-  it { should be_mode( "644" ) }
-end
-
-describe file( "/app/#{server_root}/conf/extra/workers.properties" ) do
-  it { should be_file }
-  it { should be_owned_by( "root" ) }
-  it { should be_grouped_into( "root" ) }
-  it { should be_mode( "644" ) }
-end
-
-describe file( "/app/#{server_root}/conf/extra/uriworkermap.properties" ) do
   it { should be_file }
   it { should be_owned_by( "root" ) }
   it { should be_grouped_into( "root" ) }
@@ -234,6 +210,30 @@ describe command( "grep -Ec '^FileETag MTime Size$' /app/#{server_root}/conf/htt
   its( :stdout ) { should match /^1$/ }
 end
 
+# ProxyRequests
+describe command( "grep -Ec '^ProxyRequests On$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# ProxyVia
+describe command( "grep -Ec '^ProxyVia Off$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# AllowCONNECT
+describe command( "grep -Ec '^AllowCONNECT 443$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# Proxy
+describe command( "grep -Ec '^<Proxy http://\\*>$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^<Proxy \\*:443>$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
 # LoadModule
 describe command( "grep -Ec '^LoadModule authz_host_module modules/mod_authz_host\\.so$' /app/#{server_root}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
@@ -316,6 +316,18 @@ describe command( "grep -Ec '^LoadModule alias_module modules/mod_alias\\.so$' /
 end
 
 describe command( "grep -Ec '^LoadModule rewrite_module modules/mod_rewrite\\.so$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^LoadModule proxy_module modules/mod_proxy\\.so$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^LoadModule proxy_connect_module modules/mod_proxy_connect\\.so$' /app/#{server_root}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^LoadModule proxy_http_module modules/mod_proxy_http\\.so$' /app/#{server_root}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -444,169 +456,6 @@ end
 
 # HostnameLookups
 describe command( "grep -Ec '^HostnameLookups Off$' /app/#{server_root}/conf/extra/httpd-default.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-
-
-### httpd-jk.conf
-# LoadModule
-describe command( "grep -Ec '^LoadModule jk_module modules/mod_jk\\.so$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# JkWorkersFile
-describe command( "grep -Ec '^\s*JkWorkersFile conf/extra/workers\\.properties$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# JkLogFile
-describe command( "grep -Ec '^\s*JkLogFile logs/mod_jk\\.log$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# JkLogLevel
-describe command( "grep -Ec '^\s*JkLogLevel info$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# JkShmFile
-describe command( "grep -Ec '^\s*JkShmFile /dev/shm/jk\\.shm$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# JkLogStampFormat
-describe command( "grep -Ec '^\s*JkLogStampFormat \"\\[%a %b %d %H:%M:%S %Y\\]\"$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# JkRequestLogFormat
-describe command( "grep -Ec '^\s*JkRequestLogFormat \"%w %V %T\"$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# JkOptions
-describe command( "grep -Ec '^\s*JkOptions \\+ForwardKeySize \\+ForwardURICompat -ForwardDirectories$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# Locateion(jk-status)
-describe command( "grep -Ec '^\s*<Location /jk-status>$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*JkMount jk-status$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*Require ip 127\\.0\\.0\\.1/32$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^2$/ }
-end
-
-# Locateion(jk-manager)
-describe command( "grep -Ec '^\s*<Location /jk-manager>$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*JkMount jk-manager$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# JkMountFile
-describe command( "grep -Ec '^\s*JkMountFile conf/extra/uriworkermap.properties$' /app/#{server_root}/conf/extra/httpd-jk.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-
-
-### workers.properties
-# List
-describe command( "grep -Ec '^worker\\.list=worker1,jk-status,jk-manager$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# Template
-describe command( "grep -Ec '^worker\\.template\\.type=ajp13$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^worker\\.template\\.ping_mode=A$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^worker\\.template\\.reply_timeout=298000$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-
-describe command( "grep -Ec '^worker\\.template\\.socket_connect_timeout=298000$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^worker\\.template\\.connection_pool_timeout=600$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-
-describe command( "grep -Ec '^worker\\.template\\.retries=1$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# worker1
-describe command( "grep -Ec '^worker\\.worker1\\.reference=worker\\.template$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^worker\\.worker1\\.host=#{tomcat_addr}$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^worker\\.worker1\\.port=#{tomcat_port}$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-
-# jk-status
-describe command( "grep -Ec '^worker\\.jk-status\\.type=status$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^worker\\.jk-status\\.read_only=true$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# jk-manager
-describe command( "grep -Ec '^worker\\.jk-manager\\.type=status$' /app/#{server_root}/conf/extra/workers.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-
-
-### uriworkermap.properties
-# jk-status
-describe command( "grep -Ec '^/jk-status=jk-status$' /app/#{server_root}/conf/extra/uriworkermap.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^/jk-status/\\*=jk-status$' /app/#{server_root}/conf/extra/uriworkermap.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# jk-manager
-describe command( "grep -Ec '^/jk-manager=jk-manager$' /app/#{server_root}/conf/extra/uriworkermap.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^/jk-manager/\\*=jk-manager$' /app/#{server_root}/conf/extra/uriworkermap.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# worker1
-describe command( "grep -Ec '^/#{ap_name}=worker1$' /app/#{server_root}/conf/extra/uriworkermap.properties" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^/#{ap_name}/\\*=worker1$' /app/#{server_root}/conf/extra/uriworkermap.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
