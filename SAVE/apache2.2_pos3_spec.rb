@@ -3,11 +3,11 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "httpd_cct3"
-listen_port_http = "11003"
-listen_port_https = "11103"
+service_name = "httpd2.2_pos3"
+listen_port_http = "38163"
+listen_port_https = "38443"
 tomcat_addr = "localhost"
-tomcat_port = "21003"
+tomcat_port = "38009"
 #####################
 
 ### ServiceName
@@ -230,15 +230,6 @@ describe command( "grep -E '^\s*CustomLog .+ combined env=!no_log$' /etc/#{servi
   its( :stdout ) { should match /CustomLog "logs\/access_log" combined env=!no_log$/ }
 end
 
-# RequestHeader(unset)
-describe command( "grep -Ec '^\s*RequestHeader unset' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -E '^\s*RequestHeader unset' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /RequestHeader unset Proxy early$/ }
-end
-
 # TypesConfig
 describe command( "grep -Ec '^\s*TypesConfig' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
@@ -369,10 +360,10 @@ describe command( "grep -Ec '^RequestHeader set X-Forwarded-For \"%{CLIENT_ADDR}
   its( :stdout ) { should match /^1$/ }
 end
 
-# RewriteRule(CCT)
-describe command( "grep -Ec '^RewriteRule \\^/\\?\\$ /jstorage-jets/ \\[R,L\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
+# RewriteRule(POS)
+#####describe command( "grep -Ec '^RewriteRule \\^/\\?\\$ /jcn/ \\[R,L\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
+#####  its( :stdout ) { should match /^1$/ }
+#####end
 
 # TraceEnable
 describe command( "grep -Ec '^TraceEnable Off$' /etc/#{service_name}/conf/httpd.conf" ) do
@@ -380,7 +371,7 @@ describe command( "grep -Ec '^TraceEnable Off$' /etc/#{service_name}/conf/httpd.
 end
 
 # LimitRequestBody
-describe command( "grep -Ec '^LimitRequestBody 1073741824$' /etc/#{service_name}/conf/httpd.conf" ) do
+describe command( "grep -Ec '^LimitRequestBody 20480$' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -391,22 +382,6 @@ end
 
 # LoadModule
 describe command( "grep -Ec '^LoadModule authz_host_module modules/mod_authz_host\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^LoadModule authz_core_module modules/mod_authz_core\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^LoadModule cache_module modules/mod_cache\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^LoadModule cache_disk_module modules/mod_cache_disk\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^LoadModule socache_shmcb_module modules/mod_socache_shmcb\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -442,10 +417,6 @@ describe command( "grep -Ec '^LoadModule env_module modules/mod_env\\.so$' /etc/
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^LoadModule mime_magic_module modules/mod_mime_magic\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
 describe command( "grep -Ec '^LoadModule expires_module modules/mod_expires\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
@@ -463,10 +434,6 @@ describe command( "grep -Ec '^LoadModule version_module modules/mod_version\\.so
 end
 
 describe command( "grep -Ec '^LoadModule ssl_module modules/mod_ssl\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^LoadModule unixd_module modules/mod_unixd\\.so$' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -510,7 +477,7 @@ end
 
 ### httpd-mpm.conf
 # ThreadLimit
-describe command( "grep -Ec '^\s*ThreadLimit\s*200$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
+describe command( "grep -Ec '^\s*ThreadLimit\s*800$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -525,40 +492,136 @@ describe command( "grep -Ec '^\s*MinSpareThreads\s*50$' /etc/#{service_name}/con
 end
 
 # MaxSpareThreads
-describe command( "grep -Ec '^\s*MaxSpareThreads\s*160$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
+describe command( "grep -Ec '^\s*MaxSpareThreads\s*450$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
 # ThreadsPerChild
-describe command( "grep -Ec '^\s*ThreadsPerChild\s*200$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
+describe command( "grep -Ec '^\s*ThreadsPerChild\s*400$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
 # MaxRequestsWorkers
-describe command( "grep -Ec '^\s*MaxRequestWorkers\s*400$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
-  its( :stdout ) { should match /^2$/ }
-end
-
-# MaxConnectionsPerChild
-describe command( "grep -Ec '^\s*MaxConnectionsPerChild\s*10000$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
+describe command( "grep -Ec '^\s*MaxClients\s*800$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-# MaxMemFree
-describe command( "grep -Ec '^\s*MaxMemFree\s*2048$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
-  its( :stdout ) { should match /^2$/ }
+# MaxConnectionsPerChild
+describe command( "grep -Ec '^\s*MaxRequestsPerChild\s*10000$' /etc/#{service_name}/conf/extra/httpd-mpm.conf" ) do
+  its( :stdout ) { should match /^1$/ }
 end
 
 
 
 ### httpd-multilang-errordoc.conf
 # Alias
-describe command( "grep -Ec '^Alias /error/ \"/etc/#{service_name}/error/\"$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+describe command( "grep -Ec '^Alias /error/ \"/etc/#{service_name}/custom_error/\"$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
 # Directory
-describe command( "grep -Ec '^<Directory \"/etc/#{service_name}/error\">$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+describe command( "grep -Ec '^<Directory \"/etc/#{service_name}/custom_error\">$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# ErrorDocument
+describe command( "grep -Ec '^ErrorDocument 400 /error/HTTP_BAD_REQUEST\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 401 /error/HTTP_UNAUTHORIZED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 402 /error/HTTP_PAYMENT_REQUIRED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 403 /error/HTTP_FORBIDDEN\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 404 /error/HTTP_NOT_FOUND\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 405 /error/HTTP_METHOD_NOT_ALLOWED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 406 /error/HTTP_NOT_ACCEPTABLE\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 407 /error/HTTP_PROXY_AUTHENTICATION_REQUIRED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 408 /error/HTTP_REQUEST_TIME_OUT\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 409 /error/HTTP_CONFLICT\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 410 /error/HTTP_GONE\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 411 /error/HTTP_LENGTH_REQUIRED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 412 /error/HTTP_PRECONDITION_FAILED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 413 /error/HTTP_REQUEST_ENTITY_TOO_LARGE\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 414 /error/HTTP_REQUEST_URI_TOO_LARGE\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 415 /error/HTTP_UNSUPPORTED_MEDIA_TYPE\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 416 /error/HTTP_REQUESTED_RANGE_NOT_SATISFIABLE\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 417 /error/HTTP_EXPECTATION_FAILED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 500 /error/HTTP_INTERNAL_SERVER_ERROR\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 501 /error/HTTP_NOT_IMPLEMENTED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 502 /error/HTTP_BAD_GATEWAY\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 503 /error/HTTP_SERVICE_UNAVAILABLE\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 504 /error/HTTP_GATEWAY_TIMEOUT\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 505 /error/HTTP_HTTP_VERSION_NOT_SUPPORTED\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+describe command( "grep -Ec '^ErrorDocument 506 /error/HTTP_VARIANT_ALSO_VARIES\\.txt\\.var$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -579,7 +642,12 @@ describe command( "grep -Ec '^\s*AllowOverride None$' /etc/#{service_name}/conf/
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*Require ip 127\\.0\\.0\\.1/32$' /etc/#{service_name}/conf/extra/httpd-autoindex.conf" ) do
+describe command( "grep -Ec '^\s*Order allow,deny$' /etc/#{service_name}/conf/extra/httpd-autoindex.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+
+describe command( "grep -Ec '^\s*Allow from 127\\.0\\.0\\.1/32$' /etc/#{service_name}/conf/extra/httpd-autoindex.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -849,7 +917,11 @@ describe command( "grep -Ec '^\s*SetHandler server-status$' /etc/#{service_name}
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*Require ip 127\\.0\\.0\\.1/32$' /etc/#{service_name}/conf/extra/httpd-info.conf" ) do
+describe command( "grep -Ec '^\s*Order deny,allow$' /etc/#{service_name}/conf/extra/httpd-info.conf" ) do
+  its( :stdout ) { should match /^2$/ }
+end
+
+describe command( "grep -Ec '^\s*Allow from 127\\.0\\.0\\.1/32$' /etc/#{service_name}/conf/extra/httpd-info.conf" ) do
   its( :stdout ) { should match /^2$/ }
 end
 
@@ -871,7 +943,7 @@ end
 
 ### httpd-default.conf
 # Timeout
-describe command( "grep -Ec '^Timeout 300$' /etc/#{service_name}/conf/extra/httpd-default.conf" ) do
+describe command( "grep -Ec '^Timeout 60$' /etc/#{service_name}/conf/extra/httpd-default.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -967,7 +1039,15 @@ describe command( "grep -Ec '^\s*JkMount jk-status$' /etc/#{service_name}/conf/e
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*Require ip 127\\.0\\.0\\.1/32$' /etc/#{service_name}/conf/extra/httpd-jk.conf" ) do
+describe command( "grep -Ec '^\s*Order deny,allow$' /etc/#{service_name}/conf/extra/httpd-jk.conf" ) do
+  its( :stdout ) { should match /^2$/ }
+end
+
+describe command( "grep -Ec '^\s*Deny from all$' /etc/#{service_name}/conf/extra/httpd-jk.conf" ) do
+  its( :stdout ) { should match /^2$/ }
+end
+
+describe command( "grep -Ec '^\s*Allow from 127\\.0\\.0\\.1/32$' /etc/#{service_name}/conf/extra/httpd-jk.conf" ) do
   its( :stdout ) { should match /^2$/ }
 end
 
@@ -994,7 +1074,7 @@ end
 
 ### workers.properties
 # List
-describe command( "grep -Ec '^worker\\.list=cctap01,jk-status,jk-manager$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.list=postap01,jk-status,jk-manager$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1015,7 +1095,7 @@ describe command( "grep -Ec '^worker\\.template\\.socket_keepalive=False$' /etc/
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^worker\\.template\\.connection_pool_size=200$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.template\\.connection_pool_size=400$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1027,16 +1107,16 @@ describe command( "grep -Ec '^worker\\.template\\.connection_pool_timeout=60$' /
   its( :stdout ) { should match /^1$/ }
 end
 
-# CCT
-describe command( "grep -Ec '^worker\\.cctap01\\.reference=worker\\.template$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+# POS
+describe command( "grep -Ec '^worker\\.postap01\\.reference=worker\\.template$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^worker\\.cctap01\\.host=#{tomcat_addr}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.postap01\\.host=#{tomcat_addr}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^worker\\.cctap01\\.port=#{tomcat_port}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.postap01\\.port=#{tomcat_port}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1075,12 +1155,12 @@ describe command( "grep -Ec '^/jk-manager/\\*=jk-manager$' /etc/#{service_name}/
   its( :stdout ) { should match /^1$/ }
 end
 
-# CCT
-describe command( "grep -Ec '^/jstorage-jets=cctap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
+# POS
+describe command( "grep -Ec '^/jcn=postap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^/jstorage-jets/\\*=cctap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
+describe command( "grep -Ec '^/jcn/\\*=postap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1112,7 +1192,7 @@ end
 
 ### httpd-ssl.conf
 # SSLRandomSeed
-describe command( "grep -Ec '^SSLRandomSeed startup file:/dev/urandom 512$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+describe command( "grep -Ec '^SSLRandomSeed startup file:/dev/urandom 256$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1121,12 +1201,7 @@ describe command( "grep -Ec '^SSLRandomSeed connect builtin$' /etc/#{service_nam
 end
 
 # Mutex
-describe command( "grep -Ec '^Mutex default ssl-cache$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# SSLCryptoDevice 
-describe command( "grep -Ec '^SSLCryptoDevice builtin$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+describe command( "grep -Ec '^SSLMutex \"file:/etc/#{service_name}/logs/ssl_mutex\"$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1151,7 +1226,7 @@ describe command( "grep -Ec '^SSLPassPhraseDialog builtin$' /etc/#{service_name}
 end
 
 # SSLSessionCache
-describe command( "grep -Ec '^SSLSessionCache \"shmcb:/var/cache/mod_ssl/scache\\(512000\\)\"$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+describe command( "grep -Ec '^SSLSessionCache \"shmcb:/etc/#{service_name}/logs/ssl_scache\\(512000\\)\"$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1216,7 +1291,7 @@ describe command( "grep -Ec '^SSLCertificateKeyFile \"/etc/pki/tls/private/local
 end
 
 # FilesMatch
-describe command( "grep -Ec '^<FilesMatch \"\\\\\.\\(cgi\\|shtml\\|phtml\\|php3\\?\\)\\$\"\>$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+describe command( "grep -Ec '^<FilesMatch \"\\\\\.\\(cgi\\|shtml\\|phtml\\|php\\)\\$\"\>$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1226,7 +1301,7 @@ describe command( "grep -Ec '^\s*SSLOptions \\+StdEnvVars$' /etc/#{service_name}
 end
 
 # Directory
-describe command( "grep -Ec '^<Directory \"/var/www/cgi-bin\">$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+describe command( "grep -Ec '^<Directory \"/opt/apache2.2/cgi-bin\">$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1251,15 +1326,6 @@ describe command( "grep -Ec '^CustomLog \"logs/ssl_request_log\" \\\\$' /etc/#{s
 end
 
 describe command( "grep -Ec '^\s*\"%t %h %{X-Forwarded-For}i %{SSL_PROTOCOL}x %{SSL_CIPHER}x \\\\\"%r\\\\\" %b\"$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# Directory
-describe command( "grep -Ec '^<Directory  \"/etc/#{service_name}/docs\">$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*AllowOverride ALL$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 

@@ -3,10 +3,10 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "tomcat_cct3"
-listen_port_http = "22003"
-listen_port_ajp = "21003"
-listen_port_shutdown = "23003"
+service_name = "tomcat9_pos3"
+listen_port_http = "38080"
+listen_port_ajp = "38009"
+listen_port_shutdown = "38005"
 #####################
 
 ### ServiceName
@@ -267,34 +267,10 @@ describe command( "grep -Ec '^\s*protocol=\"HTTP/1.1\"$' /etc/#{service_name}/co
 end
 
 describe command( "grep -Ec '^\s*redirectPort=\"8443\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^2$/ }
-end
-
-describe command( "grep -Ec '^\s*acceptCount=\"5\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*connectionTimeout=\"60000\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*keepAliveTimeout=\"-1\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*maxConnections=\"5\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*maxKeepAliveRequests=\"0\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*maxThreads=\"5\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*minSpareThreads=\"0\"$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*connectionTimeout=\"20000\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^2$/ }
 end
 
@@ -307,19 +283,7 @@ describe command( "grep -Ec '^\s*protocol=\"AJP/1.3\"$' /etc/#{service_name}/con
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*proxyPort=\"443\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*scheme=\"https\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*secure=\"true\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*acceptCount=\"400\"$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*acceptCount=\"600\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -331,11 +295,11 @@ describe command( "grep -Ec '^\s*keepAliveTimeout=\"150000\"$' /etc/#{service_na
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*maxConnections=\"220\"$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*maxConnections=\"600\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*maxThreads=\"220\"$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*maxThreads=\"600\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
