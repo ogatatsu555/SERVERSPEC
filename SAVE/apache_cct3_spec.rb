@@ -3,11 +3,11 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "httpd_pos3"
-listen_port_http = "38080"
-listen_port_https = "38443"
+service_name = "httpd_cct3"
+listen_port_http = "11003"
+listen_port_https = "11103"
 tomcat_addr = "localhost"
-tomcat_port = "38109"
+tomcat_port = "21003"
 #####################
 
 ### ServiceName
@@ -369,8 +369,8 @@ describe command( "grep -Ec '^RequestHeader set X-Forwarded-For \"%{CLIENT_ADDR}
   its( :stdout ) { should match /^1$/ }
 end
 
-# RewriteRule(POS)
-describe command( "grep -Ec '^RewriteRule \\^/\\?\\$ /jstorage/ \\[R,L\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
+# RewriteRule(CCT)
+describe command( "grep -Ec '^RewriteRule \\^/\\?\\$ /jstorage-jets/ \\[R,L\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -994,7 +994,7 @@ end
 
 ### workers.properties
 # List
-describe command( "grep -Ec '^worker\\.list=posap01,jk-status,jk-manager$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.list=cctap01,jk-status,jk-manager$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1027,16 +1027,16 @@ describe command( "grep -Ec '^worker\\.template\\.connection_pool_timeout=60$' /
   its( :stdout ) { should match /^1$/ }
 end
 
-# POS
-describe command( "grep -Ec '^worker\\.posap01\\.reference=worker\\.template$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+# CCT
+describe command( "grep -Ec '^worker\\.cctap01\\.reference=worker\\.template$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^worker\\.posap01\\.host=#{tomcat_addr}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.cctap01\\.host=#{tomcat_addr}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^worker\\.posap01\\.port=#{tomcat_port}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.cctap01\\.port=#{tomcat_port}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1075,12 +1075,12 @@ describe command( "grep -Ec '^/jk-manager/\\*=jk-manager$' /etc/#{service_name}/
   its( :stdout ) { should match /^1$/ }
 end
 
-# POS
-describe command( "grep -Ec '^/jstorage=posap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
+# CCT
+describe command( "grep -Ec '^/jstorage-jets=cctap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^/jstorage/\\*=posap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
+describe command( "grep -Ec '^/jstorage-jets/\\*=cctap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
