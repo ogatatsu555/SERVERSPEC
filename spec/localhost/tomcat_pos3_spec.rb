@@ -3,10 +3,10 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "tomcat_jm4"
-listen_port_http = "48080"
-listen_port_ajp = "48009"
-listen_port_shutdown = "48005"
+service_name = "tomcat_pos3"
+listen_port_http = "38180"
+listen_port_ajp = "38109"
+listen_port_shutdown = "38105"
 #####################
 
 ### ServiceName

@@ -3,11 +3,11 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "httpd_jm4"
-listen_port_http = "4080"
-listen_port_https = "4443"
+service_name = "httpd_pos3"
+listen_port_http = "38080"
+listen_port_https = "38443"
 tomcat_addr = "localhost"
-tomcat_port = "48009"
+tomcat_port = "38109"
 #####################
 
 ### ServiceName
@@ -354,24 +354,6 @@ describe command( "grep -Ec '^RewriteEngine On$' /etc/#{service_name}/conf/httpd
   its( :stdout ) { should match /^1$/ }
 end
 
-# RewriteCond
-describe command( "grep -Ec '^RewriteCond %{REQUEST_URI} !/mainte\\.html$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^2$/ }
-end
-
-describe command( "grep -Ec '^RewriteCond %{TIME_HOUR} <03$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# RewriteRule(mainte.html)
-describe command( "grep -Ec '^RewriteRule \\(\\^/jmanager/\\.\\*\\) /mainte\\.html \\[R\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^2$/ }
-end
-
-describe command( "grep -Ec '^RewriteCond %{TIME_HOUR} >22$' /etc/#{service_name}/conf/httpd.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
 # SetEnvIf(X-Forwarded-For)
 describe command( "grep -Ec '^SetEnvIf X-Forwarded-For \"\\.\\+\" forwarded$' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
@@ -387,13 +369,18 @@ describe command( "grep -Ec '^RequestHeader set X-Forwarded-For \"%{CLIENT_ADDR}
   its( :stdout ) { should match /^1$/ }
 end
 
-# RewriteRule(jmanager)
-describe command( "grep -Ec '^RewriteRule \\^/\\?\\$ /jmanager/ \\[R,L\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
+# RewriteRule(POS)
+describe command( "grep -Ec '^RewriteRule \\^/\\?\\$ /jstorage/ \\[R,L\\]$' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
 # TraceEnable
 describe command( "grep -Ec '^TraceEnable Off$' /etc/#{service_name}/conf/httpd.conf" ) do
+  its( :stdout ) { should match /^1$/ }
+end
+
+# LimitRequestBody
+describe command( "grep -Ec '^LimitRequestBody 1073741824$' /etc/#{service_name}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -572,107 +559,6 @@ end
 
 # Directory
 describe command( "grep -Ec '^<Directory \"/etc/#{service_name}/error\">$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-# ErrorDocument
-describe command( "grep -Ec '^ErrorDocument 400 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 401 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 402 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 403 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 404 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 405 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 406 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 407 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 408 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 409 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 410 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 411 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 412 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 413 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 414 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 415 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 416 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 417 /error/JMANAGER_CLIENT_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 500 /error/JMANAGER_SERVER_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 501 /error/JMANAGER_SERVER_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 502 /error/JMANAGER_SERVER_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 503 /error/JMANAGER_SERVER_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 504 /error/JMANAGER_SERVER_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 505 /error/JMANAGER_SERVER_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^ErrorDocument 506 /error/JMANAGER_SERVER_ERROR\\.html$' /etc/#{service_name}/conf/extra/httpd-multilang-errordoc.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1108,7 +994,7 @@ end
 
 ### workers.properties
 # List
-describe command( "grep -Ec '^worker\\.list=jmap01,jk-status,jk-manager$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.list=posap01,jk-status,jk-manager$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1141,16 +1027,16 @@ describe command( "grep -Ec '^worker\\.template\\.connection_pool_timeout=60$' /
   its( :stdout ) { should match /^1$/ }
 end
 
-# Jmanager
-describe command( "grep -Ec '^worker\\.jmap01\\.reference=worker\\.template$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+# POS
+describe command( "grep -Ec '^worker\\.posap01\\.reference=worker\\.template$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^worker\\.jmap01\\.host=#{tomcat_addr}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.posap01\\.host=#{tomcat_addr}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^worker\\.jmap01\\.port=#{tomcat_port}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
+describe command( "grep -Ec '^worker\\.posap01\\.port=#{tomcat_port}$' /etc/#{service_name}/conf/extra/workers.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -1189,12 +1075,12 @@ describe command( "grep -Ec '^/jk-manager/\\*=jk-manager$' /etc/#{service_name}/
   its( :stdout ) { should match /^1$/ }
 end
 
-# Jmanager
-describe command( "grep -Ec '^/jmanager=jmap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
+# POS
+describe command( "grep -Ec '^/jstorage=posap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^/jmanager/\\*=jmap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
+describe command( "grep -Ec '^/jstorage/\\*=posap01;use_server_errors=400$' /etc/#{service_name}/conf/extra/uriworkermap.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
