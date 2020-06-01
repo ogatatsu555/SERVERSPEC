@@ -3,11 +3,11 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "httpd_jm2"
-listen_port_http = "2080"
-listen_port_https = "2443"
+service_name = "httpd_jm4"
+listen_port_http = "4080"
+listen_port_https = "4443"
 tomcat_addr = "localhost"
-tomcat_port = "28009"
+tomcat_port = "48009"
 #####################
 
 ### ServiceName
