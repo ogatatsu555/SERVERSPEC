@@ -5,7 +5,7 @@ require 'spec_helper'
 #####################
 service_name = "httpd_web_tohoku"
 server_root = "web/apache/tohoku"
-server_name = "authori.tohoku-epco.co.jp:18003"
+server_name = "authori.tohoku-epco.co.jp"
 listen_port_http = "18003"
 tomcat_addr = "127.0.0.1"
 tomcat_port = "28003"
@@ -348,7 +348,7 @@ describe command( "grep -Ec '^\s*MaxRequestWorkers\s*256$' /app/#{server_root}/c
 end
 
 # MaxConnectionsPerChild
-describe command( "grep -Ec '^\s*MaxConnectionsPerChild\s*1$' /app/#{server_root}/conf/extra/httpd-mpm.conf" ) do
+describe command( "grep -Ec '^\s*MaxConnectionsPerChild\s*4000$' /app/#{server_root}/conf/extra/httpd-mpm.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
