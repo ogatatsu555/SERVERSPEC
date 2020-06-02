@@ -3,11 +3,11 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "tomcat_mem_web_tepco"
-server_root = "mem_web/tomcat/tepco"
-listen_port_http = "39001"
-listen_port_ajp = "29001"
-listen_port_shutdown = "49001"
+service_name = "tomcat_mem_web_energia"
+server_root = "mem_web/tomcat/energia"
+listen_port_http = "39005"
+listen_port_ajp = "29005"
+listen_port_shutdown = "49005"
 #####################
 
 ### ServiceName

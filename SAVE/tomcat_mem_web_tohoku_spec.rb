@@ -288,7 +288,7 @@ describe command( "grep -Ec '^\s*secure=\"true\"$' /app/#{server_root}/conf/serv
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*maxThreads=\"256\"$' /app/#{server_root}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*maxThreads=\"512\"$' /app/#{server_root}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
