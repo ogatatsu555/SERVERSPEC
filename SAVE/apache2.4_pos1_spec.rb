@@ -982,7 +982,7 @@ describe command( "grep -Ec '^MaxKeepAliveRequests 200$' /etc/#{service_name}/co
 end
 
 # KeepAliveTimeout
-describe command( "grep -Ec '^KeepAliveTimeout 1200$' /etc/#{service_name}/conf/extra/httpd-default.conf" ) do
+describe command( "grep -Ec '^KeepAliveTimeout 60$' /etc/#{service_name}/conf/extra/httpd-default.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
