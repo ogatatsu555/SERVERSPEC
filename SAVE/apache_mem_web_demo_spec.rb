@@ -3,12 +3,12 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "httpd_mem_web_test_chuden"
-server_root = "mem_web_test/apache/chuden"
-server_name = "s-chuden.cardnet.co.jp"
-listen_port_http = "19208"
+service_name = "httpd_mem_web_demo"
+server_root = "mem_web_demo/apache/kaiin"
+server_name = "d-kaiin-koukyou.cardnet.co.jp"
+listen_port_http = "19901"
 tomcat_addr = "127.0.0.1"
-tomcat_port = "29208"
+tomcat_port = "29901"
 ap_name = "KAIINWeb"
 #####################
 
