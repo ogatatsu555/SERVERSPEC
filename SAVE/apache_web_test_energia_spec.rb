@@ -3,13 +3,13 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "httpd_mem_web_02_chuden"
-server_root = "mem_web_02/apache/chuden"
-server_name = "t-chuden02.cardnet.co.jp"
-listen_port_http = "19108"
+service_name = "httpd_web_test_energia"
+server_root = "web_test/apache/energia"
+server_name = "e-energia-koukyou.cardnet.co.jp"
+listen_port_http = "18205"
 tomcat_addr = "127.0.0.1"
-tomcat_port = "29108"
-ap_name = "KAIINWeb"
+tomcat_port = "28205"
+ap_name = "ENERGIAWeb"
 #####################
 
 ### ServiceName
@@ -229,7 +229,7 @@ describe command( "grep -Ec '^LimitRequestFields 100$' /app/#{server_root}/conf/
   its( :stdout ) { should match /^1$/ }
 end
 
-# FileETag
+# FielETag
 describe command( "grep -Ec '^FileETag MTime Size$' /app/#{server_root}/conf/httpd.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
@@ -348,7 +348,7 @@ describe command( "grep -Ec '^\s*MaxRequestWorkers\s*256$' /app/#{server_root}/c
 end
 
 # MaxConnectionsPerChild
-describe command( "grep -Ec '^\s*MaxConnectionsPerChild\s*1$' /app/#{server_root}/conf/extra/httpd-mpm.conf" ) do
+describe command( "grep -Ec '^\s*MaxConnectionsPerChild\s*4000$' /app/#{server_root}/conf/extra/httpd-mpm.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 

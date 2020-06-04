@@ -3,11 +3,11 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "tomcat_mem_web_02_chuden"
-server_root = "mem_web_02/tomcat/chuden"
-listen_port_http = "39108"
-listen_port_ajp = "29108"
-listen_port_shutdown = "49108"
+service_name = "tomcat_web_test_energia"
+server_root = "web_test/tomcat/energia"
+listen_port_http = "38205"
+listen_port_ajp = "28205"
+listen_port_shutdown = "48205"
 #####################
 
 ### ServiceName
@@ -288,7 +288,7 @@ describe command( "grep -Ec '^\s*secure=\"true\"$' /app/#{server_root}/conf/serv
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*maxThreads=\"512\"$' /app/#{server_root}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*maxThreads=\"256\"$' /app/#{server_root}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
