@@ -3,7 +3,7 @@ require 'spec_helper'
 #####################
 # INCLUDE VARS HERE
 #####################
-service_name = "tomcat_jm1"
+service_name = "tomcat7_pos1"
 listen_port_http = "8080"
 listen_port_ajp = "8009"
 listen_port_shutdown = "8005"
@@ -43,107 +43,107 @@ end
 
 ### logging.properties
 # handlers
-describe command( "grep -Ec '^handlers = 1catalina\.org\.apache\.juli\.AsyncFileHandler, 2localhost\.org\.apache\.juli\.AsyncFileHandler, 3manager\.org\.apache\.juli\.AsyncFileHandler, 4host-manager\.org\.apache\.juli\.AsyncFileHandler, java\.util\.logging\.ConsoleHandler$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^handlers = 1catalina\.org\.apache\.juli\.FileHandler, 2localhost\.org\.apache\.juli\.FileHandler, 3manager\.org\.apache\.juli\.FileHandler, 4host-manager\.org\.apache\.juli\.FileHandler, java\.util\.logging\.ConsoleHandler$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
 # 1catalina
-describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.AsyncFileHandler\\.level = FINE$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.FileHandler\\.level = FINE$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.AsyncFileHandler\\.directory = \\${catalina\\.base}/logs$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.FileHandler\\.directory = \\${catalina\\.base}/logs$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.AsyncFileHandler\\.prefix = catalina\\.$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.FileHandler\\.prefix = catalina\\.$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.AsyncFileHandler\\.encoding = UTF-8$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.FileHandler\\.encoding = UTF-8$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.AsyncFileHandler\\.rotatable = false$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.FileHandler\\.rotatable = false$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.AsyncFileHandler\\.suffix = log$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^1catalina\\.org\\.apache\\.juli\\.FileHandler\\.suffix = log$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
 # 2localhost
-describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.AsyncFileHandler\\.level = FINE$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.FileHandler\\.level = FINE$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.AsyncFileHandler\\.directory = \\${catalina\\.base}/logs$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.FileHandler\\.directory = \\${catalina\\.base}/logs$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.AsyncFileHandler\\.prefix = localhost\\.$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.FileHandler\\.prefix = localhost\\.$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.AsyncFileHandler\\.encoding = UTF-8$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.FileHandler\\.encoding = UTF-8$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.AsyncFileHandler\\.rotatable = false$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.FileHandler\\.rotatable = false$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.AsyncFileHandler\\.suffix = log$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^2localhost\\.org\\.apache\\.juli\\.FileHandler\\.suffix = log$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
 # 3manager
-describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.level = FINE$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.FileHandler\\.level = FINE$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.directory = \\${catalina\\.base}/logs$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.FileHandler\\.directory = \\${catalina\\.base}/logs$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.prefix = manager\\.$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.FileHandler\\.prefix = manager\\.$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.encoding = UTF-8$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.FileHandler\\.encoding = UTF-8$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.rotatable = false$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.FileHandler\\.rotatable = false$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.suffix = log$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^3manager\\.org\\.apache\\.juli\\.FileHandler\\.suffix = log$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
 # 4host-manager
-describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.level = FINE$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.FileHandler\\.level = FINE$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.directory = \\${catalina\\.base}/logs$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.FileHandler\\.directory = \\${catalina\\.base}/logs$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.prefix = host-manager\\.$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.FileHandler\\.prefix = host-manager\\.$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.encoding = UTF-8$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.FileHandler\\.encoding = UTF-8$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.rotatable = false$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.FileHandler\\.rotatable = false$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.AsyncFileHandler\\.suffix = log$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^4host-manager\\.org\\.apache\\.juli\\.FileHandler\\.suffix = log$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -152,7 +152,7 @@ describe command( "grep -Ec '^java\\.util\\.logging\\.ConsoleHandler\\.level = F
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^java\\.util\\.logging\\.ConsoleHandler\\.formatter = org\\.apache\\.juli\\.OneLineFormatter$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^java\\.util\\.logging\\.ConsoleHandler\\.formatter = org\\.apache\\.juli\\.logging\\.SimpleFormatter$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -166,7 +166,7 @@ describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\\[Catalina\\]\\.\\[localhost\\]\\.handlers = 2localhost\\.org\\.apache\\.juli\\.AsyncFileHandler$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\\[Catalina\\]\\.\\[localhost\\]\\.handlers = 2localhost\\.org\\.apache\\.juli\\.FileHandler$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -174,7 +174,7 @@ describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\\[Catalina\\]\\.\\[localhost\\]\\.\\[/manager\\]\\.handlers = 3manager\\.org\\.apache\\.juli\\.AsyncFileHandler$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\\[Catalina\\]\\.\\[localhost\\]\\.\\[/manager\\]\\.handlers = 3manager\\.org\\.apache\\.juli\\.FileHandler$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -182,7 +182,7 @@ describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\\[Catalina\\]\\.\\[localhost\\]\\.\\[/host-manager\\]\\.handlers = 4host-manager\\.org\\.apache\\.juli\\.AsyncFileHandler$' /etc/#{service_name}/conf/logging.properties" ) do
+describe command( "grep -Ec '^org\\.apache\\.catalina\\.core\\.ContainerBase\\.\\[Catalina\\]\\.\\[localhost\\]\\.\\[/host-manager\\]\\.handlers = 4host-manager\\.org\\.apache\\.juli\\.FileHandler$' /etc/#{service_name}/conf/logging.properties" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -195,7 +195,7 @@ describe command( "grep -Ec '^<Server port=\"#{listen_port_shutdown}\" shutdown=
 end
 
 # Listener
-describe command( "grep -Ec '^\s*<Listener className=\"org\\.apache\\.catalina\\.startup\\.VersionLoggerListener\" />$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*<Listener className=\"org.apache.catalina.core.JasperListener\" />$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -267,34 +267,10 @@ describe command( "grep -Ec '^\s*protocol=\"HTTP/1.1\"$' /etc/#{service_name}/co
 end
 
 describe command( "grep -Ec '^\s*redirectPort=\"8443\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^2$/ }
-end
-
-describe command( "grep -Ec '^\s*acceptCount=\"5\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*connectionTimeout=\"60000\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*keepAliveTimeout=\"-1\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*maxConnections=\"5\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*maxKeepAliveRequests=\"0\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*maxThreads=\"5\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*minSpareThreads=\"0\"$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*connectionTimeout=\"20000\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^2$/ }
 end
 
@@ -307,19 +283,7 @@ describe command( "grep -Ec '^\s*protocol=\"AJP/1.3\"$' /etc/#{service_name}/con
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*proxyPort=\"443\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*scheme=\"https\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*secure=\"true\"$' /etc/#{service_name}/conf/server.xml" ) do
-  its( :stdout ) { should match /^1$/ }
-end
-
-describe command( "grep -Ec '^\s*acceptCount=\"400\"$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*acceptCount=\"600\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -331,11 +295,11 @@ describe command( "grep -Ec '^\s*keepAliveTimeout=\"150000\"$' /etc/#{service_na
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*maxConnections=\"220\"$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*maxConnections=\"600\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*maxThreads=\"220\"$' /etc/#{service_name}/conf/server.xml" ) do
+describe command( "grep -Ec '^\s*maxThreads=\"600\"$' /etc/#{service_name}/conf/server.xml" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
@@ -424,7 +388,7 @@ describe file( "/var/log/#{service_name}/catalina.out" ) do
   it { should be_file }
   it { should be_owned_by( "tomcat" ) }
   it { should be_grouped_into( "tomcat" ) }
-  it { should be_mode( "640" ) }
+  it { should be_mode( "644" ) }
 end
 
 
@@ -434,7 +398,7 @@ describe file( "/etc/#{service_name}/logs/catalina.log" ) do
   it { should be_file }
   it { should be_owned_by( "tomcat" ) }
   it { should be_grouped_into( "tomcat" ) }
-  it { should be_mode( "640" ) }
+  it { should be_mode( "644" ) }
 end
 
 
@@ -444,7 +408,7 @@ describe file( "/etc/#{service_name}/logs/access.log" ) do
   it { should be_file }
   it { should be_owned_by( "tomcat" ) }
   it { should be_grouped_into( "tomcat" ) }
-  it { should be_mode( "640" ) }
+  it { should be_mode( "644" ) }
 end
 
 describe command( "curl -s http://localhost:#{listen_port_http}/HC.html" ) do

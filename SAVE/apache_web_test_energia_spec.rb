@@ -5,7 +5,7 @@ require 'spec_helper'
 #####################
 service_name = "httpd_web_test_energia"
 server_root = "web_test/apache/energia"
-server_name = "e-energia-koukyou.cardnet.co.jp"
+server_name = "s-energia-koukyou.cardnet.co.jp"
 listen_port_http = "18205"
 tomcat_addr = "127.0.0.1"
 tomcat_port = "28205"
