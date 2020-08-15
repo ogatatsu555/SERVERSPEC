@@ -1369,11 +1369,11 @@ describe command( "grep -Ec '^\s*\"%t %h %{X-Forwarded-For}i %{SSL_PROTOCOL}x %{
 end
 
 # Directory
-describe command( "grep -Ec '^<Directory  \"/etc/#{service_name}/docs\">$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+describe command( "grep -Ec '^<Directory \"/etc/#{service_name}/docs\">$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
-describe command( "grep -Ec '^\s*AllowOverride ALL$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
+describe command( "grep -Ec '^\s*AllowOverride All$' /etc/#{service_name}/conf/extra/httpd-ssl.conf" ) do
   its( :stdout ) { should match /^1$/ }
 end
 
